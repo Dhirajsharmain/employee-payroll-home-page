@@ -1,7 +1,7 @@
 /**
  * validation for name in frontend
  */
-window.addEventListener('DOMContentLoaded', (event) => {
+ window.addEventListener('DOMContentLoaded', (event) => {
     const name = document.querySelector('#name');
     const textError = document.querySelector('.text-error');
     name.addEventListener('input', function () {

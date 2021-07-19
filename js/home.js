@@ -1,6 +1,20 @@
+let empPayrollList;
+
 window.addEventListener('DOMContentLoaded', (event) => {
+    empPayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
+    localStorage.removeItem('editEmp');
 })
+
+/**
+ * Method read employee payroll data from local storage
+ * @returns 
+ */
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ?
+                        JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+}
 
 /**
  * UC4,5 - Method for manupulating inner html of id table-display 
@@ -17,8 +31,9 @@ const createInnerHtml = () => {
                         <th>Start Date</th>
                         <th>Action</th>`;
 
+    if(empPayrollList.length == 0) return;
+
     let innerHtml = `${headerHtml}`
-    let empPayrollList = createEmployeePayrollJSON();
     for (const empPayrollData of empPayrollList){
         innerHtml = ` ${innerHtml}
     <tr>
