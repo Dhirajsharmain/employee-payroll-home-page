@@ -42,7 +42,7 @@ const createInnerHtml = () => {
         <td>${empPayrollData._gender}</td>
         <td>${getDeptHtml(empPayrollData._department)}</td>
         <td>${empPayrollData._salary}</td>
-        <td>${empPayrollData._StartDate}</td>
+        <td>${getDate(empPayrollData._startDate)}</td>
         <td>
             <img name="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
             <img name="${empPayrollData._id}" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
@@ -53,6 +53,17 @@ const createInnerHtml = () => {
     document.querySelector('#table-display').innerHTML = innerHtml;
 }
 
+/**
+ * converting numbers into date format.
+ * @param {*} date :1577817000000
+ * @returns : 3 - Jan - 2020
+ */
+const getDate = (date) => {
+    let temp = date;
+    const d = new Date(temp);
+    const months = ["Jan","Feb","Mar","April","May","June","July","Aug","Sep","Oct","Nov","Dec"];
+    return  d.getDay() + " - " + months[d.getMonth()] + " - " + d.getFullYear();
+}
 /**
  * Helper method for department column
  */
