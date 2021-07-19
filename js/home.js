@@ -2,7 +2,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     createInnerHtml();
 })
 
-//UC4
+/**
+ * UC4,5 - Method for manupulating inner html of id table-display 
+ */
 
 const createInnerHtml = () => {
 
@@ -15,22 +17,71 @@ const createInnerHtml = () => {
                         <th>Start Date</th>
                         <th>Action</th>`;
 
-     const innerHtml = ` ${headerHtml}
-        <tr>
-            <td> <img class="profile" src="../assets/profile-images/Ellipse -2.png" alt=""></td>
-            <td>Narayan Mahadevan New</td>
-            <td>Male</td>
-            <td>
-                <div class="dept-label">HR</div>
-                <div class="dept-label">Engineer</div>
-            </td>
-            <td>300000</td>
-            <td>1 Nov 2020</td>
-            <td>
-                <img id="1" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
-                <img id="1" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
-            </td>
-            </tr>
-        `;
+    let innerHtml = `${headerHtml}`
+    let empPayrollList = createEmployeePayrollJSON();
+    for (const empPayrollData of empPayrollList){
+        innerHtml = ` ${innerHtml}
+    <tr>
+        <td><img class="profile" src="${empPayrollData._profilePic}" alt=""></td>
+        <td>${empPayrollData._name}</td>
+        <td>${empPayrollData._gender}</td>
+        <td>${getDeptHtml(empPayrollData._department)}</td>
+        <td>${empPayrollData._salary}</td>
+        <td>${empPayrollData._StartDate}</td>
+        <td>
+            <img name="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
+            <img name="${empPayrollData._id}" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
+        </td>
+    </tr>
+    `;
+    }
     document.querySelector('#table-display').innerHTML = innerHtml;
+}
+
+/**
+ * Helper method for department column
+ */
+const getDeptHtml = (deptList) => {
+    let deptHtml = '';
+    for (const dept of deptList) {
+        deptHtml = `${deptHtml} <div class='dept-label'>${dept}</div>`
+    }
+    return deptHtml;
+}
+
+
+/**
+ * 
+ * @returns Creating JSON object
+ */
+const createEmployeePayrollJSON = () => {
+    let empPayrollListLocal = [
+        {
+            _name: 'Narayan Mahadevan',
+            _gender: 'male',
+            _department: [
+                'Engineer',
+                'Finance'
+            ],
+            _salary: '400000',
+            _StartDate: '19 July 2021',
+            _note: '',
+            _id: 1,
+            _profilePic: '../assets/profile-images/Ellipse -1.png'
+        },
+        {
+            _name: 'Dhiraj',
+            _gender: 'male',
+            _department: [
+                'Engineer',
+                'Finance'
+            ],
+            _salary: '400000',
+            _StartDate: '19 July 2021',
+            _note: '',
+            _id: 1,
+            _profilePic: '../assets/profile-images/Ellipse -2.png'
+        }
+    ];
+    return empPayrollListLocal;
 }
