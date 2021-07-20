@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     empPayrollList = getEmployeePayrollDataFromStorage();
     document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
+    localStorage.removeItem('editEmp');
 })
 
 /**
@@ -12,7 +13,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
  */
 const getEmployeePayrollDataFromStorage = () => {
     return localStorage.getItem('EmployeePayrollList') ?
-                        JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+        JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
 }
 
 /**
@@ -30,10 +31,10 @@ const createInnerHtml = () => {
                         <th>Start Date</th>
                         <th>Action</th>`;
 
-    if(empPayrollList.length == 0) return;
+    if (empPayrollList.length == 0) return;
 
     let innerHtml = `${headerHtml}`
-    for (const empPayrollData of empPayrollList){
+    for (const empPayrollData of empPayrollList) {
         innerHtml = ` ${innerHtml}
     <tr>
         <td><img class="profile" src="${empPayrollData._profilePic}" alt=""></td>
@@ -60,8 +61,8 @@ const createInnerHtml = () => {
 const getDate = (date) => {
     let temp = date;
     const d = new Date(temp);
-    const months = ["Jan","Feb","Mar","April","May","June","July","Aug","Sep","Oct","Nov","Dec"];
-    return  d.getDate() + "  " + months[d.getMonth()] + "  " + d.getFullYear();
+    const months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return d.getDate() + "  " + months[d.getMonth()] + "  " + d.getFullYear();
 }
 
 /**
@@ -81,8 +82,7 @@ const getDeptHtml = (deptList) => {
  * @returns Creating JSON object
  */
 const createEmployeePayrollJSON = () => {
-    let empPayrollListLocal = [
-        {
+    let empPayrollListLocal = [{
             _name: 'Narayan Mahadevan',
             _gender: 'male',
             _department: [
@@ -113,7 +113,7 @@ const createEmployeePayrollJSON = () => {
 }
 
 const remove = (node) => {
-    empPayrollList = empPayrollList.filter( emp => emp._id != node.id);
+    empPayrollList = empPayrollList.filter(emp => emp._id != node.id);
     storeDataToLocalStorage();
     createInnerHtml();
     document.querySelector(".emp-count").textContent = empPayrollList.length;

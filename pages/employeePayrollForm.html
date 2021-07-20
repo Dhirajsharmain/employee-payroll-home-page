@@ -23,7 +23,7 @@
     </header>
 
     <div class="form-content">
-        <form action="#" class="form" onreset="resetForm()" onsubmit="save()">
+        <form action="#" class="form" onreset="resetForm()" onsubmit="save(event)">
             <!--- UC2 --->
             <div class="form-head">Employee Payroll Form</div>
 
@@ -93,7 +93,7 @@
             <!---- UC5 ---->
             <div class="row-content">
                 <label for="startDate" class="label text">Start Date</label>
-                <div>
+                <div id="date">
                     <select id="day" name="Day">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -142,6 +142,7 @@
                         <option value="Dec">December</option>
                     </select>
                     <select name="Year" id="year">
+                        <option value="2021">2021</option>
                         <option value="2020">2020</option>
                         <option value="2019">2019</option>
                         <option value="2018">2018</option>
@@ -149,6 +150,7 @@
                         <option value="2016">2016</option>
                     </select>
                 </div>
+                <error-output class="date-error" for="startDate"></error-output>
             </div>
             <!---- UC6 ---->
             <div class="row-content">
@@ -166,6 +168,7 @@
     </div>
     <script defer src="../js/utility.js"></script>
     <script defer src="../js/employeePayrollForm.js"></script>
+    <script defer src="../js/site_properties.js"></script>
 </body>
 
 </html>

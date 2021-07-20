@@ -4,23 +4,33 @@ let employeePayrollObj = {};
 /**
  * validation for name in frontend
  */
- window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', (event) => {
     const name = document.querySelector('#name');
-    const textError = document.querySelector('.text-error');
     name.addEventListener('input', function () {
         if (name.value.length == 0) {
-            textError.textContent = "";
+            setTextValues('.text-error', "");
             return;
         }
         try {
             (new EmployeePayrollData()).name = name.value;
-            textError.textContent = "";
+            setTextValues('.text-error', "");
         } catch (e) {
-            textError.textContent = e;
+            setTextValues('.text-error', e);
         }
     });
 
 
+    const date = document.querySelector('#date');
+    date.addEventListener('input', function () {
+        const startDate = new Date(Date.parse(getInputValueById('#day') + " " +
+            getInputValueById('#month') + " " + getInputValueById('#year')));
+        try {
+            (new EmployeePayrollData()).startDate = new Date(Date.parse(startDate));
+            setTextValues('.date-error', "");
+        } catch (e) {
+            setTextValues('.date-error', e);
+        }
+    })
 
     const salary = document.querySelector("#salary");
     const output = document.querySelector('.salary-output');
@@ -32,14 +42,19 @@ let employeePayrollObj = {};
     checkForUpdate();
 })
 
+
 /**
  * Main method that invoked by submit button
  * @returns 
  */
-function save() {
+function save(event) {
+    event.preventDefault;
+    event.stopPropagation;
     try {
-        let employeePayrollData = createEmployeePayroll();
-        createAndUpdateStorage(employeePayrollData);
+        setEmployeePayrollObject();
+        createAndUpdateStorage();
+        resetForm();
+        window.location.replace(site_properties.home_page);
     } catch (e) {
         console.log(e);
         return;
@@ -50,16 +65,40 @@ function save() {
  * Method for storing employee payroll data to local storage 
  * @param {*} employeePayrollData : employee payroll data
  */
-function createAndUpdateStorage(employeePayrollData) {
+function createAndUpdateStorage() {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-    if (employeePayrollList != undefined) {
-        employeePayrollList.push(employeePayrollData);
+    if (employeePayrollList) {
+        let empPayrollData = employeePayrollList.
+        find(empData => empData._id == employeePayrollObj._id);
+
+        if (!empPayrollData) {
+            employeePayrollList.push(createEmployeePayrollData());
+        } else {
+            const index = employeePayrollList
+                .map(empData => empData._id)
+                .indexOf(empPayrollData._id);
+            employeePayrollList.splice(index, 1, createEmployeePayrollData(empPayrollData._id));
+        }
+
     } else {
-        employeePayrollList = [employeePayrollData]
+        employeePayrollList = [createEmployeePayrollData()]
     }
 
     alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList))
+}
+
+/**
+ * helper function for createAndUpdateStorage function
+ * @param {*} id 
+ * @returns 
+ */
+const createEmployeePayrollData = (id) => {
+    let employeePayrollData = new EmployeePayrollData();
+    if (!id) employeePayrollData.id = createNewEmployeeId();
+    else employeePayrollData.id = id;
+    setEmployeePayrollData(employeePayrollData);
+    return employeePayrollData;
 }
 
 /**
@@ -175,12 +214,10 @@ const setSelectedIndex = (id, index) => {
 }
 
 const checkForUpdate = () => {
-    // const empId = new URLSearchParams(window.location.search).get('id');
-    // const employeePayrollJsonnew = JSON.parse(localStorage.getItem("EmployeePayrollList")).find(emp => emp_id == empId);
     const employeePayrollJson = localStorage.getItem('editEmp');
     isUpdate = employeePayrollJson ? true : false;
-    if(!isUpdate) return;
-    employeePayrollObj = JSON.parse(employeePayrollJson); 
+    if (!isUpdate) return;
+    employeePayrollObj = JSON.parse(employeePayrollJson);
     setForm();
 }
 
@@ -198,15 +235,65 @@ const setForm = () => {
     setValues('#year', date[2]);
 }
 
+
+/**
+ * 
+ * @param {*} propertyValues 
+ * @param {*} value 
+ */
 const setSelectedValues = (propertyValues, value) => {
     let allItems = document.querySelectorAll(propertyValues);
     allItems.forEach(item => {
-        if(Array.isArray(value)){
-            if(value.includes(item.value)){
+        if (Array.isArray(value)) {
+            if (value.includes(item.value)) {
                 item.checked = true;
             }
-        }
-        else if (item.value === value)
+        } else if (item.value === value)
             item.checked = true;
     })
+}
+
+/**
+ * 
+ */
+const setEmployeePayrollObject = () => {
+    employeePayrollObj._name = getInputValueById('#name');
+    employeePayrollObj._profilePic = getSelectedValues('[name=profile]').pop();
+    employeePayrollObj._gender = getSelectedValues('[name=gender]').pop();
+    employeePayrollObj._department = getSelectedValues('[name=department]');
+    employeePayrollObj._salary = getInputValueById('#salary');
+    employeePayrollObj._notes = getInputValueById('#notes');
+    let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " + getInputValueById('#year');
+    employeePayrollObj._startDate = date;
+}
+
+/**
+ * 
+ */
+const setEmployeePayrollData = (employeePayrollData) => {
+    try {
+        employeePayrollData.name = employeePayrollObj._name;
+    } catch (e) {
+        setTextValues('.text-error', e)
+        throw e;
+    }
+
+    employeePayrollData.profilePic = employeePayrollObj._profilePic;
+    employeePayrollData.gender = employeePayrollObj._gender;
+    employeePayrollData.department = employeePayrollObj._department;
+    employeePayrollData.salary = employeePayrollObj._salary;
+    employeePayrollData.notes = employeePayrollObj._notes;
+    try {
+        employeePayrollData.startDate = new Date(Date.parse(employeePayrollObj._startDate));
+    } catch (e) {
+        setTextValues('.text-error', e)
+        throw e;
+    }
+}
+
+const createNewEmployeeId = () => {
+    let empID = localStorage.getItem("EmployeeID");
+    empID = !empID ? 1 : (parseInt(empID) + 1).toString();
+    localStorage.setItem("EmployeeID", empID);
+    return empID
 }
