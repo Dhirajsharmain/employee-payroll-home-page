@@ -62,8 +62,9 @@ const getDate = (date) => {
     let temp = date;
     const d = new Date(temp);
     const months = ["Jan","Feb","Mar","April","May","June","July","Aug","Sep","Oct","Nov","Dec"];
-    return  d.getDay() + " - " + months[d.getMonth()] + " - " + d.getFullYear();
+    return  d.getDate() + "  " + months[d.getMonth()] + "  " + d.getFullYear();
 }
+
 /**
  * Helper method for department column
  */
