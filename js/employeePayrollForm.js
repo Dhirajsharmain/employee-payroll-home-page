@@ -221,6 +221,10 @@ const checkForUpdate = () => {
     setForm();
 }
 
+
+/**
+ * Main method for setting the data into form
+ */
 const setForm = () => {
     setValues('#name', employeePayrollObj._name);
     setSelectedValues('[name=profile]', employeePayrollObj._profilePic);
@@ -237,7 +241,7 @@ const setForm = () => {
 
 
 /**
- * 
+ * Helper methof for setting select value into form
  * @param {*} propertyValues 
  * @param {*} value 
  */
@@ -254,7 +258,7 @@ const setSelectedValues = (propertyValues, value) => {
 }
 
 /**
- * 
+ * UC9 - creating employee payroll data json object 
  */
 const setEmployeePayrollObject = () => {
     employeePayrollObj._name = getInputValueById('#name');
@@ -291,6 +295,10 @@ const setEmployeePayrollData = (employeePayrollData) => {
     }
 }
 
+/**
+ * Creating Id for data to store into local storage
+ * @returns 
+ */
 const createNewEmployeeId = () => {
     let empID = localStorage.getItem("EmployeeID");
     empID = !empID ? 1 : (parseInt(empID) + 1).toString();
