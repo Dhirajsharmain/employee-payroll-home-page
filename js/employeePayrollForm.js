@@ -1,3 +1,6 @@
+let isUpdate = false;
+let employeePayrollObj = {};
+
 /**
  * validation for name in frontend
  */
@@ -25,6 +28,8 @@
     salary.addEventListener('input', function () {
         output.textContent = salary.value;
     });
+
+    checkForUpdate();
 })
 
 /**
@@ -128,9 +133,9 @@ const resetForm = () => {
     unsetSelectedValues('[name=department]');
     setValues('#salary', '');
     setValues('#notes', '');
-    setValues('#day', '1');
-    setValues('#month', 'January');
-    setValues('#year', '2020');
+    setSelectedIndex('#day', '0');
+    setSelectedIndex('#month', '0');
+    setSelectedIndex('#year', '0');
 }
 
 /**
@@ -162,4 +167,46 @@ const setValues = (id, value) => {
 const setTextValues = (id, value) => {
     const element = document.querySelector(id);
     element.textContent = value;
+}
+
+const setSelectedIndex = (id, index) => {
+    const element = document.querySelector(id);
+    element.selectedIndex = index;
+}
+
+const checkForUpdate = () => {
+    // const empId = new URLSearchParams(window.location.search).get('id');
+    // const employeePayrollJsonnew = JSON.parse(localStorage.getItem("EmployeePayrollList")).find(emp => emp_id == empId);
+    const employeePayrollJson = localStorage.getItem('editEmp');
+    isUpdate = employeePayrollJson ? true : false;
+    if(!isUpdate) return;
+    employeePayrollObj = JSON.parse(employeePayrollJson); 
+    setForm();
+}
+
+const setForm = () => {
+    setValues('#name', employeePayrollObj._name);
+    setSelectedValues('[name=profile]', employeePayrollObj._profilePic);
+    setSelectedValues('[name=gender]', employeePayrollObj._gender);
+    setSelectedValues('[name=department]', employeePayrollObj._department);
+    setValues('#salary', employeePayrollObj._salary);
+    setTextValues('.salary-output', employeePayrollObj._salary);
+    setValues('#notes', employeePayrollObj._notes);
+    let date = getstringifyDate(employeePayrollObj._startDate).split(" ");
+    setValues('#day', date[0]);
+    setValues('#month', date[2]);
+    setValues('#year', date[4]);
+}
+
+const setSelectedValues = (propertyValues, value) => {
+    let allItems = document.querySelectorAll(propertyValues);
+    allItems.forEach(item => {
+        if(Array.isArray(value)){
+            if(value.includes(item.value)){
+                item.checked = true;
+            }
+        }
+        else if (item.value === value)
+            item.checked = true;
+    })
 }

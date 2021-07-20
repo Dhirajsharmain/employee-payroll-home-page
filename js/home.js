@@ -43,8 +43,8 @@ const createInnerHtml = () => {
         <td>${empPayrollData._salary}</td>
         <td>${getDate(empPayrollData._startDate)}</td>
         <td>
-            <img name="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
-            <img name="${empPayrollData._id}" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
+            <img id="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
+            <img id="${empPayrollData._id}" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
         </td>
     </tr>
     `;
@@ -113,7 +113,7 @@ const createEmployeePayrollJSON = () => {
 }
 
 const remove = (node) => {
-    empPayrollList = empPayrollList.filter( emp => emp._id != node.name);
+    empPayrollList = empPayrollList.filter( emp => emp._id != node.id);
     storeDataToLocalStorage();
     createInnerHtml();
     document.querySelector(".emp-count").textContent = empPayrollList.length;
