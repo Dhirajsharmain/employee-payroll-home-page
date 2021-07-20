@@ -4,7 +4,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     empPayrollList = getEmployeePayrollDataFromStorage();
     document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
-    localStorage.removeItem('editEmp');
 })
 
 /**
@@ -111,4 +110,15 @@ const createEmployeePayrollJSON = () => {
         }
     ];
     return empPayrollListLocal;
+}
+
+const remove = (node) => {
+    empPayrollList = empPayrollList.filter( emp => emp._id != node.name);
+    storeDataToLocalStorage();
+    createInnerHtml();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+}
+
+const storeDataToLocalStorage = () => {
+    localStorage.setItem('EmployeePayrollList', JSON.stringify(empPayrollList));
 }
