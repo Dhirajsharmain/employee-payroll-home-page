@@ -192,10 +192,10 @@ const setForm = () => {
     setValues('#salary', employeePayrollObj._salary);
     setTextValues('.salary-output', employeePayrollObj._salary);
     setValues('#notes', employeePayrollObj._notes);
-    let date = getstringifyDate(employeePayrollObj._startDate).split(" ");
+    let date = getstringifyDate(employeePayrollObj._startDate).split("  ");
     setValues('#day', date[0]);
-    setValues('#month', date[2]);
-    setValues('#year', date[4]);
+    setValues('#month', date[1]);
+    setValues('#year', date[2]);
 }
 
 const setSelectedValues = (propertyValues, value) => {
